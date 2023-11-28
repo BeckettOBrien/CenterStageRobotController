@@ -16,7 +16,7 @@ public class PropLocatorPipeline extends OpenCvPipeline {
     public Mat processFrame(Mat input) {
 //        Mat out = new Mat();
         Imgproc.cvtColor(input, mat, Imgproc.COLOR_RGB2HSV);
-        Core.inRange(mat, new Scalar(90, 100, 100), new Scalar(95, 255, 255), temp);
+        Core.inRange(mat, new Scalar(-2, 100, 100), new Scalar(2, 255, 255), temp);
         Imgproc.cvtColor(temp, temp2, Imgproc.COLOR_GRAY2RGB);
         Core.bitwise_and(mat, temp2, mat);
         Imgproc.cvtColor(mat, mat, Imgproc.COLOR_HSV2RGB);

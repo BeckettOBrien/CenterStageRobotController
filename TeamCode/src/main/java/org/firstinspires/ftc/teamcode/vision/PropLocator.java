@@ -18,11 +18,11 @@ import org.openftc.easyopencv.OpenCvPipeline;
 
 public class PropLocator {
 
-    public static final int ORANGE_HUE_LOW = 15;
-    public static final int ORANGE_HUE_HIGH = 20;
+    public static final int RED_HUE_LOW = -2;
+    public static final int RED_HUE_HIGH = 2;
 
-    public static final int CYAN_HUE_LOW = 90;
-    public static final int CYAN_HUE_HIGH = 95;
+    public static final int BLUE_HUE_LOW = 105;
+    public static final int BLUE_HUE_HIGH = 110;
     public enum Location {
         LEFT, MIDDLE, RIGHT
     }
@@ -34,15 +34,15 @@ public class PropLocator {
 
     public static PropLocator redSideLocator() {
         PropLocator locator = new PropLocator();
-        locator.low = ORANGE_HUE_LOW;
-        locator.high = ORANGE_HUE_HIGH;
+        locator.low = RED_HUE_LOW;
+        locator.high = RED_HUE_HIGH;
         return locator;
     }
 
     public static PropLocator blueSideLocator() {
         PropLocator locator = new PropLocator();
-        locator.low = CYAN_HUE_LOW;
-        locator.high = CYAN_HUE_HIGH;
+        locator.low = BLUE_HUE_LOW;
+        locator.high = BLUE_HUE_HIGH;
         return locator;
     }
 
@@ -56,7 +56,7 @@ public class PropLocator {
     }
 
     public void stream() {
-        camera.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
+        camera.startStreaming(640, 360, OpenCvCameraRotation.UPRIGHT);
         FtcDashboard.getInstance().startCameraStream(camera, 30);
     }
 
