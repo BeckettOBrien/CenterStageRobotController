@@ -33,14 +33,13 @@ public class TestUtil extends OpMode {
 
     @Override
     public void loop() {
-        if (gamepad1.options) {
-            robot.resetForwardHeading();
-            robot.resetForwardHeading();
-        }
+//        if (gamepad1.options) {
+//            robot.resetForwardHeading();
+//        }
 
-//        robot.liftPower((gamepad1.right_trigger - gamepad1.left_trigger) * 0.2);
-        robot.leftLift.setPower(LIFT_MOTOR_POWER_LEFT);
-        robot.rightLift.setPower(LIFT_MOTOR_POWER_RIGHT);
+        robot.liftPower((gamepad1.right_trigger - gamepad1.left_trigger) * 0.2);
+//        robot.leftLift.setPower(LIFT_MOTOR_POWER_LEFT);
+//        robot.rightLift.setPower(LIFT_MOTOR_POWER_RIGHT);
 
         if (gamepad1.a) {
             robot.cartridgeRotateLeft.setPosition(CARTRIDGE_ROTATE_POS_LEFT);
@@ -50,6 +49,15 @@ public class TestUtil extends OpMode {
 
         telemetry.addData("Left Lift Encoder", robot.leftLift.getCurrentPosition());
         telemetry.addData("Right Lift Encoder", robot.rightLift.getCurrentPosition());
+
+        telemetry.addData("Left stick y", gamepad1.left_stick_y);
+        telemetry.addData("Left stick y rates", applyRates(gamepad1.left_stick_y));
+        telemetry.addData("Left stick x", gamepad1.left_stick_x);
+        telemetry.addData("Right stick x", gamepad1.right_stick_x);
+    }
+
+    double applyRates(double input) {
+        return (input < 0 ? -1 : 1) * Math.pow(Math.abs(input), 1.8);
     }
 
 }

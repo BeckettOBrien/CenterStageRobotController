@@ -16,18 +16,21 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 public class RobotHardware {
 
     // --- Configured Values ---
+    // Motor power corrections
+    static double LIFT_POWER_CORRECTION = 0.001;
     // Servo positions
-    static final double CARTRIDGE_DROP_OPEN = 0.1;
-    static final double CARTRIDGE_DROP_CLOSED = 0.5;
-    static final double CARTRIDGE_ROTATE_HOME_LEFT = 0.85;
-    static final double CARTRIDGE_ROTATE_HOME_RIGHT = 0.2;
-    static final double CARTRIDGE_ROTATE_FORWARD_LEFT = 0.50; //55
-    static final double CARTRIDGE_ROTATE_FORWARD_RIGHT = 0.55; //50
+    static final double CARTRIDGE_DROP_OPEN = 0.2;
+    static final double CARTRIDGE_DROP_CLOSED = 0.8;
+    static final double CARTRIDGE_ROTATE_HOME_LEFT = 0.9;
+    static final double CARTRIDGE_ROTATE_HOME_RIGHT = 0.1;
+    static final double CARTRIDGE_ROTATE_FORWARD_LEFT = 0.6; //55
+    static final double CARTRIDGE_ROTATE_FORWARD_RIGHT = 0.4; //50
     // Motor Limits
     static final int LEFT_LIFT_MIN_BOUND = 0;
     static final int RIGHT_LIFT_MIN_BOUND = 0;
-    static final int LEFT_LIFT_MAX_BOUND = 1000;
-    static final int RIGHT_LIFT_MAX_BOUND = 1000;
+    static final int LEFT_LIFT_MAX_BOUND = 1400;
+    static final int RIGHT_LIFT_MAX_BOUND = 1400;
+    static final int MIN_LIFT_CARTRIDGE_HEIGHT = 100;
     // -------------------------
 
     // --- Hardware ---
@@ -42,6 +45,8 @@ public class RobotHardware {
     // Linear slide motors
     public DcMotorEx leftLift;
     public DcMotorEx rightLift;
+    // Intake motor
+    public DcMotorEx intake;
     // Cartridge servos
     public Servo cartridgeRotateLeft;
     public Servo cartridgeRotateRight;
@@ -82,6 +87,9 @@ public class RobotHardware {
         leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        intake = hardwareMap.get(DcMotorEx.class, "intake");
+        intake.setDirection(DcMotorSimple.Direction.FORWARD);
+
         cartridgeRotateLeft = hardwareMap.get(Servo.class, "crl");
         cartridgeRotateRight = hardwareMap.get(Servo.class, "crr");
         cartridgeDrop = hardwareMap.get(Servo.class, "cd");
@@ -105,18 +113,18 @@ public class RobotHardware {
     public void resetEncoders() {
         brake();
 
-        backLeftDrive.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        backRightDrive.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        frontLeftDrive.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        frontRightDrive.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+//        backLeftDrive.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+//        backRightDrive.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+//        frontLeftDrive.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+//        frontRightDrive.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 
         leftLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        backLeftDrive.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        backRightDrive.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        frontLeftDrive.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        frontRightDrive.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+//        backLeftDrive.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+//        backRightDrive.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+//        frontLeftDrive.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+//        frontRightDrive.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
         leftLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -157,25 +165,33 @@ public class RobotHardware {
 
     // -- Manipulator Functions --
     public void liftPower(double power) {
-//        if ((leftLift.getCurrentPosition() <= LEFT_LIFT_MIN_BOUND) || (rightLift.getCurrentPosition() <= RIGHT_LIFT_MIN_BOUND)) {
-//            power = Range.clip(power, 0, 1);
-//        }
-//        if ((leftLift.getCurrentPosition() >= LEFT_LIFT_MAX_BOUND) || (rightLift.getCurrentPosition() >= RIGHT_LIFT_MAX_BOUND)) {
-//            power = Range.clip(power, -1, 0);
-//        }
-        leftLift.setPower(power);
-        rightLift.setPower(power);
+        double clipped_power = power + LIFT_POWER_CORRECTION;
+        if ((leftLift.getCurrentPosition() <= LEFT_LIFT_MIN_BOUND) || (rightLift.getCurrentPosition() <= RIGHT_LIFT_MIN_BOUND)) {
+            clipped_power = Range.clip(power, 0, 1);
+        }
+        if ((leftLift.getCurrentPosition() >= LEFT_LIFT_MAX_BOUND) || (rightLift.getCurrentPosition() >= RIGHT_LIFT_MAX_BOUND)) {
+            clipped_power = Range.clip(power, -1, 0);
+        }
+        leftLift.setPower(clipped_power);
+        rightLift.setPower(clipped_power);
+    }
+
+    public void intakePower(double power) {
+        intake.setPower(power);
     }
 
     public void rotateCartridgeForward() {
+        if ((leftLift.getCurrentPosition() < MIN_LIFT_CARTRIDGE_HEIGHT) || (rightLift.getCurrentPosition() < MIN_LIFT_CARTRIDGE_HEIGHT)) return;
         cartridgeRotateLeft.setPosition(CARTRIDGE_ROTATE_FORWARD_LEFT);
         cartridgeRotateRight.setPosition(CARTRIDGE_ROTATE_FORWARD_RIGHT);
         cartridgeRotateForward = true;
     }
 
     public void rotateCartridgeHome() {
+        if ((leftLift.getCurrentPosition() < MIN_LIFT_CARTRIDGE_HEIGHT) || (rightLift.getCurrentPosition() < MIN_LIFT_CARTRIDGE_HEIGHT)) return;
         cartridgeRotateLeft.setPosition(CARTRIDGE_ROTATE_HOME_LEFT);
         cartridgeRotateRight.setPosition(CARTRIDGE_ROTATE_HOME_RIGHT);
+        openCartridge();
         cartridgeRotateForward = false;
     }
 
