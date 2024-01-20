@@ -19,12 +19,13 @@ public class RobotHardware {
     // Motor power corrections
     static double LIFT_POWER_CORRECTION = 0.001;
     // Servo positions
-    static final double CARTRIDGE_DROP_OPEN = 0.2;
+    static final double CARTRIDGE_DROP_OPEN = 0.0;
     static final double CARTRIDGE_DROP_CLOSED = 0.8;
-    static final double CARTRIDGE_ROTATE_HOME_LEFT = 0.9;
-    static final double CARTRIDGE_ROTATE_HOME_RIGHT = 0.1;
-    static final double CARTRIDGE_ROTATE_FORWARD_LEFT = 0.6; //55
-    static final double CARTRIDGE_ROTATE_FORWARD_RIGHT = 0.4; //50
+    static final double CARTRIDGE_ROTATE_HOME_LEFT = 0.5;
+    static final double CARTRIDGE_ROTATE_HOME_RIGHT = 0.5;
+    static final double CARTRIDGE_ROTATE_FORWARD_LEFT = 0.2;
+    static final double CARTRIDGE_ROTATE_FORWARD_RIGHT = 0.8;
+    static final double PLANE_LAUNCH_RELEASE_POS = 0.0;
     // Motor Limits
     static final int LEFT_LIFT_MIN_BOUND = 0;
     static final int RIGHT_LIFT_MIN_BOUND = 0;
@@ -51,6 +52,8 @@ public class RobotHardware {
     public Servo cartridgeRotateLeft;
     public Servo cartridgeRotateRight;
     public Servo cartridgeDrop;
+    // Plane launcher servo
+    public Servo planeLaunch;
     // ----------------
 
     // --- Runtime Properties ---
@@ -93,6 +96,7 @@ public class RobotHardware {
         cartridgeRotateLeft = hardwareMap.get(Servo.class, "crl");
         cartridgeRotateRight = hardwareMap.get(Servo.class, "crr");
         cartridgeDrop = hardwareMap.get(Servo.class, "cd");
+        planeLaunch = hardwareMap.get(Servo.class, "pl");
     }
 
     public void initializeIMU() {
@@ -221,4 +225,10 @@ public class RobotHardware {
         }
     }
     // ---------------------------
+
+    // -- Extra game functions --
+    public void launchPlane() {
+        planeLaunch.setPosition(PLANE_LAUNCH_RELEASE_POS);
+    }
+    // --------------------------
 }
