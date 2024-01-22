@@ -17,6 +17,7 @@ public class TestUtil extends OpMode {
     public static double CARTRIDGE_ROTATE_POS_LEFT = 0;
     public static double CARTRIDGE_ROTATE_POS_RIGHT = 0;
     public static double CARTRIDGE_DROP_POS = 0;
+    public static double PLANE_LAUNCH_POS = 0;
 
     RobotHardware robot;
 
@@ -46,6 +47,7 @@ public class TestUtil extends OpMode {
             robot.cartridgeRotateRight.setPosition(CARTRIDGE_ROTATE_POS_RIGHT);
             robot.cartridgeDrop.setPosition(CARTRIDGE_DROP_POS);
         }
+        robot.planeLaunch.setPosition(PLANE_LAUNCH_POS);
 
         telemetry.addData("Left Lift Encoder", robot.leftLift.getCurrentPosition());
         telemetry.addData("Right Lift Encoder", robot.rightLift.getCurrentPosition());

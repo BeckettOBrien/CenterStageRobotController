@@ -26,6 +26,7 @@ public class RobotHardware {
     static final double CARTRIDGE_ROTATE_FORWARD_LEFT = 0.2;
     static final double CARTRIDGE_ROTATE_FORWARD_RIGHT = 0.8;
     static final double PLANE_LAUNCH_RELEASE_POS = 0.0;
+    static final double PLANE_LAUNCH_LOAD_POS = 0.6;
     // Motor Limits
     static final int LEFT_LIFT_MIN_BOUND = 0;
     static final int RIGHT_LIFT_MIN_BOUND = 0;
@@ -229,6 +230,9 @@ public class RobotHardware {
     // -- Extra game functions --
     public void launchPlane() {
         planeLaunch.setPosition(PLANE_LAUNCH_RELEASE_POS);
+    }
+    public void loadPlane() {
+        planeLaunch.setPosition(PLANE_LAUNCH_LOAD_POS);
     }
     // --------------------------
 }
