@@ -51,6 +51,9 @@ public class TestUtil extends OpMode {
 
         telemetry.addData("Left Lift Encoder", robot.leftLift.getCurrentPosition());
         telemetry.addData("Right Lift Encoder", robot.rightLift.getCurrentPosition());
+        telemetry.addData("Left Dead Wheel Encoder", robot.leftDeadEncoder.getCurrentPosition());
+        telemetry.addData("Right Dead Wheel Encoder", robot.rightDeadEncoder.getCurrentPosition());
+        telemetry.addData("Front Dead Wheel Encoder", robot.frontDeadEncoder.getCurrentPosition());
 
         telemetry.addData("Left stick y", gamepad1.left_stick_y);
         telemetry.addData("Left stick y rates", applyRates(gamepad1.left_stick_y));

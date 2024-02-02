@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.RobotHardware;
-import org.firstinspires.ftc.teamcode.vision.PropLocator;
+import org.firstinspires.ftc.teamcode.util.vision.PropLocator;
 
 @Config
 @TeleOp(name="Vision Test Utility", group="Iterative Opmode")

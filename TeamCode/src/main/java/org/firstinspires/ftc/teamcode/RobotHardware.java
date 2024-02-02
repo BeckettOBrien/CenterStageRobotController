@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.util.Encoder;
 
 @Config
 public class RobotHardware {
@@ -36,7 +37,7 @@ public class RobotHardware {
     // -------------------------
 
     // --- Hardware ---
-    HardwareMap hardwareMap;
+    public HardwareMap hardwareMap;
     // IMU
     IMU imu;
     // Drive motors
@@ -55,6 +56,10 @@ public class RobotHardware {
     public Servo cartridgeDrop;
     // Plane launcher servo
     public Servo planeLaunch;
+    // Odometry Encoders
+    public Encoder rightDeadEncoder;
+    public Encoder leftDeadEncoder;
+    public Encoder frontDeadEncoder;
     // ----------------
 
     // --- Runtime Properties ---
@@ -98,6 +103,14 @@ public class RobotHardware {
         cartridgeRotateRight = hardwareMap.get(Servo.class, "crr");
         cartridgeDrop = hardwareMap.get(Servo.class, "cd");
         planeLaunch = hardwareMap.get(Servo.class, "pl");
+
+        rightDeadEncoder = new Encoder(frontLeftDrive);
+        leftDeadEncoder = new Encoder(backLeftDrive);
+        frontDeadEncoder = new Encoder(backRightDrive);
+
+        rightDeadEncoder.setDirection(Encoder.Direction.FORWARD);
+        leftDeadEncoder.setDirection(Encoder.Direction.REVERSE);
+        frontDeadEncoder.setDirection(Encoder.Direction.REVERSE);
     }
 
     public void initializeIMU() {
@@ -159,7 +172,6 @@ public class RobotHardware {
         double magnitude = Math.sqrt((drive * drive) + (strafe * strafe));
         double botDrive = magnitude * Math.cos(relativeAngle);
         double botStrafe = magnitude * Math.sin(relativeAngle);
-        botStrafe *= 1.1; // Correct strafing?
         drive(botDrive, botStrafe, rotate, speed);
     }
 

@@ -59,6 +59,7 @@ public class TwoDriverFullTeleop extends OpMode {
         if (gamepad2.right_bumper) robot.rotateCartridgeForward();
         if (gamepad2.left_bumper) robot.rotateCartridgeHome();
         if (gamepad1.y) robot.launchPlane();
+//        if (gamepad2.y) robot.liftPower(-0.5);
 
         robot.intakePower(INTAKE_SPEED * (gamepad1.right_bumper ? 1 : (gamepad1.left_bumper ? -0.75 : 0)));
     }
