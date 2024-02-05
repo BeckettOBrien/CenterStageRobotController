@@ -14,8 +14,8 @@ public class TwoDriverFullTeleop extends OpMode {
     public static double INPUT_RATE_EXPONENT = 1.8;
     public static double DRIVE_SPEED_MULTIPLIER = 0.8;
     public static double TURN_SPEED_MULTIPLIER = 0.5;
-    public static double LIFT_SPEED_MULTIPLIER = 0.2;
-    public static double INTAKE_SPEED = 0.9;
+    public static double LIFT_SPEED_MULTIPLIER = 0.35;
+    public static double INTAKE_SPEED = 1.0;
 
     RobotHardware robot;
 

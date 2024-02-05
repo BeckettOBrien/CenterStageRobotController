@@ -18,11 +18,11 @@ import org.openftc.easyopencv.OpenCvPipeline;
 
 public class PropLocator {
 
-    public static final int RED_HUE_LOW = -2;
-    public static final int RED_HUE_HIGH = 2;
+    public static final int RED_HUE_LOW = -10;
+    public static final int RED_HUE_HIGH = 10;
 
-    public static final int BLUE_HUE_LOW = 105;
-    public static final int BLUE_HUE_HIGH = 110;
+    public static final int BLUE_HUE_LOW = 95;
+    public static final int BLUE_HUE_HIGH = 115;
     public enum Location {
         LEFT, MIDDLE, RIGHT
     }
@@ -56,7 +56,7 @@ public class PropLocator {
     }
 
     public void stream() {
-        camera.startStreaming(640, 360, OpenCvCameraRotation.UPRIGHT);
+        camera.startStreaming(640, 360, OpenCvCameraRotation.UPSIDE_DOWN);
         FtcDashboard.getInstance().startCameraStream(camera, 30);
     }
 
@@ -74,9 +74,9 @@ public class PropLocator {
 @Config
 class PropLocatorPipeline extends OpenCvPipeline {
 
-    static final Rect leftROI = new Rect(new Point(0, 0), new Point(100, 100));
-    static final Rect midROI = new Rect(new Point(0, 0), new Point(100, 100));
-    static final Rect rightROI = new Rect(new Point(0, 0), new Point(100, 100));
+    static final Rect leftROI = new Rect(new Point(90, 200), new Point(190, 300));
+    static final Rect midROI = new Rect(new Point(300, 200), new Point(400, 300));
+    static final Rect rightROI = new Rect(new Point(500, 200), new Point(600, 300));
 
     static final Scalar rectColor = new Scalar(255, 255, 255);
     static final Scalar foundColor = new Scalar(0, 255, 0);
@@ -130,9 +130,10 @@ class PropLocatorPipeline extends OpenCvPipeline {
         }
 
         if (!showGrayscale) mat = input;
-        Imgproc.rectangle(mat, leftROI, (currentLocation == PropLocator.Location.LEFT) ? foundColor : rectColor);
-        Imgproc.rectangle(mat, midROI, (currentLocation == PropLocator.Location.MIDDLE) ? foundColor : rectColor);
-        Imgproc.rectangle(mat, rightROI, (currentLocation == PropLocator.Location.RIGHT) ? foundColor : rectColor);
+//        Imgproc.cvtColor(mat, mat, Imgproc.COLOR_GRAY2RGB);
+        Imgproc.rectangle(mat, leftROI, (currentLocation == PropLocator.Location.LEFT) ? foundColor : rectColor, 4);
+        Imgproc.rectangle(mat, midROI, (currentLocation == PropLocator.Location.MIDDLE) ? foundColor : rectColor, 4);
+        Imgproc.rectangle(mat, rightROI, (currentLocation == PropLocator.Location.RIGHT) ? foundColor : rectColor, 4);
         return mat;
     }
 

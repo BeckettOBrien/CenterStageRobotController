@@ -184,7 +184,7 @@ public class RobotHardware {
     public void liftPower(double power) {
         double clipped_power = power + LIFT_POWER_CORRECTION;
         if ((leftLift.getCurrentPosition() <= LEFT_LIFT_MIN_BOUND) || (rightLift.getCurrentPosition() <= RIGHT_LIFT_MIN_BOUND)) {
-            clipped_power = Range.clip(power, 0, 1);
+            clipped_power = Range.clip(power, -0.2, 1);
         }
         if ((leftLift.getCurrentPosition() >= LEFT_LIFT_MAX_BOUND) || (rightLift.getCurrentPosition() >= RIGHT_LIFT_MAX_BOUND)) {
             clipped_power = Range.clip(power, -1, 0);
